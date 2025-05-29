@@ -4,12 +4,15 @@
 - Section Number: 300/301
 
 
-1. What challenges did you face in completing this assignment?
-There was a bit of a learning curve about using templates and adding them to each page. Sometimes I wasn't sure whether I should assign a variable from the template before or after I included the template page. I also had some trouble remembering to close loops and if statements with the endforeach; and endif; statements when using colons instead of curly braces.
+1. What changes did you make when refactoring the project?
 
-2. What did you find most interesting about creating PHP templates?
-I thought it was interesting being able to organize a project into many different pages to keep things neat, and be able to include data from one page in another. It's a bit similar to creating different files for components like we did with Blazor.
+- When refactoring, I removed the template I was using before because there is no more repeated code, and I deleted the other pages. I also changed the navigation to use query strings instead of linking to another page.
 
-3. How does PHP differ from other programming languages you have used?
-It was hard for me to remember to add the endif; and endforeach; statements, which is something I've never had to use in any other language. It was also different having to keep closing the php tag before including some html, because with razor syntax there's the @ symbol for C#, but there's nothing to close it. It was a bit weird having to open and close the php tag multiple times in the same loop.
+2. In your own words, what are the guidelines for knowing when to use $_POST over query strings and $_GET?
+
+- When the user is submitting a large amount of information, $_POST is better to use, because it can transmit more data at once. In this project, when adding a new invoice, we use post to because the user is filling in multiple fields which correspond to a few key-value pairs. To filter the invoice statuses, we use get because there is less information. Also, if the information being entered is sensitive, it shouldn't use get which would put it in the URL and make it visible.
+
+3. What are some limitations to using sessions for persistent data? What could be done to overcome those limitations?
+
+- When using sessions for persistent data, the major limitation is that when the browser is closed, the session ends and all the previously saved data is then lost. To save the data and keep it persistent, the best way is to use a database.
 

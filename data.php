@@ -1,4 +1,16 @@
 <?php 
+  session_start();
+
+  function getInvoiceNumber ($length = 5) {
+    $letters = range('A', 'Z');
+    $number = [];
+    
+    for ($i = 0; $i < $length; $i++) {
+      array_push($number, $letters[rand(0, count($letters) - 1)]);
+    }
+    return implode($number);
+  }
+
   $statuses = ['all', 'draft', 'pending', 'paid'];
 
   $invoices = [
@@ -178,3 +190,10 @@
       'email'  => 'darcythompson@enormo.com',
     ]
   ];
+
+  // Keep data persistent
+  if (isset($_SESSION['invoices'])) {
+    $invoices = $_SESSION['invoices'];
+  } else {
+    $_SESSION['invoices'] = $invoices;
+  }
