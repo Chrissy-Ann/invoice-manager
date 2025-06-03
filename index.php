@@ -8,18 +8,17 @@
       });
     }
 
-    // If the add form was submitted, add the data to the invoice array
-    if ($_SERVER["REQUEST_METHOD"] === 'POST') {
-      array_push($invoices, [
-        'number' => getInvoiceNumber(),
-        'amount' => $_POST['amount'],
-        'status' => $_POST['status'],
-        'client' => $_POST['client'],
-        'email' => $_POST['email']
-      ]);
+    // Delete
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+      $index = array_find_key($invoices, function ($invoice) {
+        return $invoice['number'] == $_POST['number'];
+      });
 
-      // Update session array
+      unset($invoices[$index]);
+
       $_SESSION['invoices'] = $invoices;
+      header("Location: index.php");
+      exit();
     }
 ?>
 <!DOCTYPE html>
@@ -47,7 +46,7 @@
       </div>
 	  </nav>
       
-    <table class="table">
+    <table class="table align-middle">
       <thead>
         <tr>
           <th>Account Number</th>
@@ -65,12 +64,19 @@
             <td><?php echo $invoice['email'] ?></td>
             <td><?php echo "$ {$invoice['amount']}.00" ?></td>
             <?php if ($invoice['status'] == 'paid'): ?>
-              <td class="table-success">Paid</td>
+              <td class="table-success text-center">Paid</td>
             <?php elseif ($invoice['status'] == 'pending'): ?>
-              <td class="table-warning">Pending</td>
+              <td class="table-warning text-center">Pending</td>
             <?php else : ?>
-              <td class="table-secondary">Draft</td>
+              <td class="table-secondary text-center">Draft</td>
             <?php endif; ?>
+            <td><a href="update.php?number=<?php echo $invoice['number'] ?>" class="btn btn-link">Edit</a></td>
+            <td>
+              <form method="post">
+                <input type="hidden" name="number" value="<?php echo $invoice['number']; ?>"/>
+                <button type="submit" class="text-danger btn btn-link">Delete</button>
+              </form>
+            </td>
           </tr>
         <?php endforeach; ?>
       </tbody>
