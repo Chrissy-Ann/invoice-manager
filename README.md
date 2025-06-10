@@ -4,15 +4,14 @@
 - Section Number: 300/301
 
 
-1. What validation techniques did you use for this project?
+1. Beyond incorporating the invoice_manager.sqlite database, what other refactoring did you do for this part of the project?
 
-- I created a sanitize and a validate function in functions.php. In the sanitization function I converted the one value in the data array that is 
-supposed to be an int from a string, and stripped the white space, slashes and special characters. In the validate function, I used empty() to check whether an input had a value, because all inputs are required. For the client name, it had to be under 255 characters, so I did a simple numerical comparison using strlen(). It also could only be spaces and letters, so I used a regular expression and preg_match to test it. For the next two inputs, I used FILTER_VALIDATE to test whether the value was in email or numerical form. For the final input, the select list, I checked whether the value was in the $statuses array using in_array(), also making sure the value wasn't 'all', which was in the array but not a valid input. I also used html validation by including the attribute 'required' in the html input tag.
+- Other than adding in the database, I created more functions in functions.php for the CRUD operations, instead of putting all the code on the main web pages. I edited the $statuses array in data.php to retrieve the statuses from the database. I also made a template of the inputs, like in the movie-mayhe demo, for the forms in update.php and add.php, because I was repeating the code.
 
-2. In your own words, why is it important to add validation to the forms?
+2. In your own words, why is it important to use prepared statements and when should you use them?
 
-- It is important to add validation to forms to ensure that the data received is in the proper format. If you are using the data after it is received and it isn't in the proper format, you might get an error. It is also important to help users, by giving them feedback about what they are doing wrong with their input so they know how to fix it. Validation also protects against malicious input, protecting the website and the program.
+- It is important to use prepared statements to avoid SQL injection. This is when a user submits malicious input, such as SQL instructing the database to delete data. Prepared statements should be used whenever data is received from a user to be sent to the database, such as a form with user inputs to add, update or delete something from the database.
 
-3. What improvements or changes would you make to the project either in additional features or improvement in the existing code?
+3. How did using a database to manage the data differ from using a session array? Which do you prefer and why?
 
-- It would be best to retrieve and store the data in a database instead of an array, because now the data is only kept persistent within the session. Once the browser closes, the data resets. It might also be helpful to be able to sort the invoices, instead of only being able to filter by status. For example, sorting alphabetically by client name. It would also be helpful to be able to search for a specific invoice number or client name, especially if there is a very long list of invoices.
+- Using a database means that the data stays persistent even between sessions, when the browser is closed. I prefer databases when a lot of data is being handled, because it is more robust than using sessions.

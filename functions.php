@@ -18,12 +18,6 @@ function sanitize($data) {
 }
 
 // Validate Function
-/*
-The Client Name field must contain only letters and spaces and cannot be more than 255 characters.
-The Client Email field must be a properly formatted email address.
-The Invoice Amount must be an integer.
-The Invoice Status must be either "draft", "pending", or "paid"
-*/
 function validate($invoice) {
   $fields = ['client', 'email', 'amount', 'status'];
   $errors = [];
@@ -64,4 +58,114 @@ function validate($invoice) {
     }
   }
   return $errors;
+}
+
+// Create Invoice Number Function
+function getInvoiceNumber ($length = 5) {
+  $letters = range('A', 'Z');
+  $number = [];
+    
+  for ($i = 0; $i < $length; $i++) {
+    array_push($number, $letters[rand(0, count($letters) - 1)]);
+  }
+  return implode($number);
+}
+
+// Get All Invoices
+function getInvoices() 
+{
+  global $db;
+
+  $sql = "SELECT * FROM invoices";
+  $result = $db->query($sql);
+  $invoices = $result->fetchAll(PDO::FETCH_ASSOC);
+
+  return $invoices;
+}
+
+// Filter invoices
+function filterInvoices ($status_id) 
+{
+  global $db;
+
+  $sql = "SELECT * FROM invoices WHERE status_id = :status_id";
+  $stmt = $db->prepare($sql);
+  $stmt->execute([':status_id' => $status_id]);
+  $invoices = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+  return $invoices;
+}
+
+// Get Invoice
+function getInvoice ($id) 
+{
+  global $db;
+
+  $sql = "SELECT * FROM invoices WHERE id = :id";
+  $stmt = $db->prepare($sql);
+  $stmt->execute(['id' => $id]);
+  $invoice = $stmt->fetch();
+
+  return $invoice;
+}
+
+// Get Status Id
+function getStatusId ($status) 
+{
+  global $statuses;
+
+  return array_search($status, $statuses) + 1;
+}
+
+
+// Add Invoice
+function addInvoice ($invoice) 
+{
+  global $db;
+  $status_id = getStatusId($invoice['status']);
+
+  $sql = "INSERT INTO invoices (number, client, email, amount, status_id) VALUES (:number, :client, :email, :amount, :status_id)";
+  $stmt = $db->prepare($sql);
+  $stmt->execute([
+    ':number' => getInvoiceNumber(),
+    ':client' => $invoice['client'],
+    ':email' => $invoice['email'],
+    ':amount' => $invoice['amount'],
+    ':status_id' => $status_id
+  ]);
+
+  return $db->lastInsertId();
+}
+
+
+// Update Invoice
+function updateInvoice ($invoice) 
+{
+  global $db;
+  $status_id = getStatusId($invoice['status']);
+
+  $sql = "UPDATE invoices SET client = :client, email = :email, amount = :amount, status_id = :status_id WHERE id = :id";
+  $stmt = $db->prepare($sql);
+  $stmt->execute([
+    ':client' => $invoice['client'],
+    ':email' => $invoice['email'],
+    ':amount' => $invoice['amount'],
+    ':status_id' => $status_id,
+    ':id' => $invoice['id']
+  ]);
+
+  return $invoice['id'];
+}
+
+
+// Delete Invoice
+function deleteInvoice ($id) 
+{
+  global $db;
+
+  $sql = "DELETE FROM invoices WHERE id = :id";
+  $stmt = $db->prepare($sql);
+  $stmt->execute([':id' => $id]);
+
+  return $stmt->rowCount() === 1;
 }

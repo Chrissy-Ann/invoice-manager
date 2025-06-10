@@ -2,44 +2,32 @@
   require "data.php";
   require "functions.php";
 
+
   if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Sanitize and validate
     $errors = [];
-    $updated = sanitize($_POST);
-    $errors = validate($updated);
+    $invoice = sanitize($_POST);
+    $errors = validate($invoice);
 
-    // Update an invoice
-    if (count($errors) == 0) {
-      $invoices = array_map(function ($invoice) use ($updated) {
-        if ($invoice['number'] == $updated['number']) {
-          var_dump($updated);
-          return $updated;
-        }
-        return $invoice;
-      }, $invoices);
-
-      $_SESSION['invoices'] = $invoices;
-
+    if (count($errors) === 0) {
+      // Update the invoice
+      updateInvoice($invoice);
+      
+      // Redirect to index
       header("Location: index.php");
     }
-  }
-
-  // Show the correct invoice using query string
-  if (isset($_GET['number'])) {
-    $invoice = current(array_filter($invoices, function ($invoice) {
-      return $invoice['number'] == $_GET['number'];
-    }));
+  } else if (isset($_GET['id'])) {
+    // Get invoice information to prepopulate the form
+    $invoice = getInvoice($_GET['id']);
 
     if (!$invoice) {
-      header("Location: index.php");
+    header("Location: index.php");
     }
   } else {
     header("Location: index.php");
     exit();
   }
-
-  // Array of possible statuses (not including all)
-  $possStatus = ['draft', 'pending', 'paid'];
-
+  
 ?>
 
 <!DOCTYPE html>
@@ -70,36 +58,10 @@
                 
         <form method="post" class="bg-light border border-1 p-4">
 
+          <input type="hidden" name="id" value="<?php echo $invoice['id'] ?>"/>
           <input type="hidden" name="number" value="<?php echo $invoice['number'] ?>"/>
 
-          <div class="form-group mb-3">
-            <label class="form-label" for="client">Client Name</label>
-            <input class="form-control" id="client" name="client" required value="<?php echo $invoice['client']; ?>">
-          </div>
-
-          <div class="form-group mb-3">
-            <label class="form-label" for="email">Client Email</label>
-            <input class="form-control" type="email" id="email" name="email" required value="<?php echo $invoice['email']; ?>">
-          </div>
-
-          <div class="form-group mb-3">
-            <label class="form-label" for="amount">Invoice Amount</label>
-            <input class="form-control" id="amount" name="amount" required value="<?php echo $invoice['amount']; ?>">
-          </div>
-
-          <div class="form-group mb-3">
-            <label class="form-label" for="status">Invoice Status</label>
-            <select class="form-select" id="status" name="status" required>
-              <option value="">Select a Status</option>
-              <?php foreach ($possStatus as $status) : ?>
-                <option
-                  value="<?php echo $status; ?>"
-                  <?php if ($status == $invoice['status']) : ?> selected <?php endif; ?> >
-                  <?php echo ucfirst($status); ?>
-                </option>
-              <?php endforeach; ?>
-            </select>
-          </div>
+          <?php require "inputs.php"; ?>
 
           <button type="submit" class="btn btn-primary">Update Invoice</button>
           <a class="btn btn-secondary" href="index.php">Cancel</a>

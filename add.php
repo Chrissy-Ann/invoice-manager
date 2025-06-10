@@ -2,31 +2,21 @@
   require "data.php";
   require "functions.php";
 
-  // Add form submission
-    if ($_SERVER["REQUEST_METHOD"] === 'POST') {
+  if ($_SERVER["REQUEST_METHOD"] === 'POST') {
     // Sanitize and validate
     $errors = [];
     $invoice = sanitize($_POST);
     $errors = validate($invoice);
 
-    if (count($errors) == 0) {
-      // Add the data to the invoice array if there are no errors
-      array_push($invoices, [
-        'number' => getInvoiceNumber(),
-        'amount' => $_POST['amount'],
-        'status' => $_POST['status'],
-        'client' => $_POST['client'],
-        'email' => $_POST['email']
-      ]);
-
-      // Update session array
-      $_SESSION['invoices'] = $invoices;
+    if (count($errors) === 0) {
+      // Call add invoice function
+      $id = addInvoice($invoice);
 
       // Redirect to index
       header("Location: index.php");
       exit();
-      }
     }
+  }
 
 ?>
 <!DOCTYPE html>
@@ -56,30 +46,7 @@
                 
         <form method="post" class="bg-light border border-1 p-4">
 
-          <div class="form-group mb-3">
-            <label class="form-label" for="client">Client Name</label>
-            <input class="form-control" id="client" name="client" required>
-          </div>
-
-          <div class="form-group mb-3">
-            <label class="form-label" for="email">Client Email</label>
-            <input class="form-control" type="email" id="email" name="email" required>
-          </div>
-
-          <div class="form-group mb-3">
-            <label class="form-label" for="amount">Invoice Amount</label>
-            <input class="form-control" id="amount" name="amount" required>
-          </div>
-
-          <div class="form-group mb-3">
-            <label class="form-label" for="status">Invoice Status</label>
-            <select class="form-select" id="status" name="status" required>
-              <option value="">Select a Status</option>
-              <option value="draft">Draft</option>
-              <option value="pending">Pending</option>
-              <option value="paid">Paid</option>
-            </select>
-          </div>
+          <?php require "inputs.php"; ?>
 
           <button type="submit" class="btn btn-primary">Add Invoice</button>
           <a class="btn btn-secondary" href="index.php">Cancel</a>

@@ -1,25 +1,29 @@
 <?php
-    require "data.php";
+  require "data.php";
+  require "functions.php";
 
-    // Filter invoice data based on status using query string
-    if (isset($_GET['status'])) {
-      $invoices = array_filter($invoices, function ($invoice) {
-      return $invoice['status'] === $_GET['status'];
-      });
+  if (isset($_GET['status_id'])) {
+	  // Filter statuses based on query string  
+    $invoices = filterInvoices($_GET['status_id']);
+  } else {
+    // Otherwise show all invoices
+	  $invoices = getInvoices();
+  }
+
+  // Delete an invoice
+  if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $success = deleteInvoice($_POST['id']);
+
+    if (!$success) {
+        header("Location: index.php");
+        exit();
     }
 
-    // Delete
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-      $index = array_find_key($invoices, function ($invoice) {
-        return $invoice['number'] == $_POST['number'];
-      });
-
-      unset($invoices[$index]);
-
-      $_SESSION['invoices'] = $invoices;
-      header("Location: index.php");
-      exit();
-    }
+    header("Location: index.php");
+    exit();
+  }
+  
+    
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -37,9 +41,9 @@
     <nav class="nav nav-tabs justify-content-between mb-3">
       <div class="d-flex">
 		    <a class="nav-link" href="index.php">All</a>
-		    <a class="nav-link" href="index.php?status=draft">Draft</a>
-        <a class="nav-link" href="index.php?status=pending">Pending</a>
-        <a class="nav-link" href="index.php?status=paid">Paid</a>
+		    <a class="nav-link" href="index.php?status_id=1">Draft</a>
+        <a class="nav-link" href="index.php?status_id=2">Pending</a>
+        <a class="nav-link" href="index.php?status_id=3">Paid</a>
       </div>
       <div class="text-end">
         <a class="nav-link" href="add.php">&plus;Add</a>
@@ -63,17 +67,17 @@
             <td><?php echo $invoice['client'] ?></td>
             <td><?php echo $invoice['email'] ?></td>
             <td><?php echo "$ {$invoice['amount']}.00" ?></td>
-            <?php if ($invoice['status'] == 'paid'): ?>
+            <?php if ($invoice['status_id'] == 3): ?>
               <td class="table-success text-center">Paid</td>
-            <?php elseif ($invoice['status'] == 'pending'): ?>
+            <?php elseif ($invoice['status_id'] == 2): ?>
               <td class="table-warning text-center">Pending</td>
             <?php else : ?>
               <td class="table-secondary text-center">Draft</td>
             <?php endif; ?>
-            <td><a href="update.php?number=<?php echo $invoice['number'] ?>" class="btn btn-link">Edit</a></td>
+            <td><a href="update.php?id=<?php echo $invoice['id']; ?>" class="btn btn-link">Edit</a></td>
             <td>
               <form method="post">
-                <input type="hidden" name="number" value="<?php echo $invoice['number']; ?>"/>
+                <input type="hidden" name="id" value="<?php echo $invoice['id']; ?>"/>
                 <button type="submit" class="text-danger btn btn-link">Delete</button>
               </form>
             </td>
