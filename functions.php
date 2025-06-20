@@ -134,7 +134,11 @@ function addInvoice ($invoice)
     ':status_id' => $status_id
   ]);
 
-  return $db->lastInsertId();
+  $id = $db->lastInsertId();
+
+  saveDocument($id);
+
+  return $id;
 }
 
 
@@ -154,6 +158,8 @@ function updateInvoice ($invoice)
     ':id' => $invoice['id']
   ]);
 
+  saveDocument($invoice['id']);
+
   return $invoice['id'];
 }
 
@@ -168,4 +174,30 @@ function deleteInvoice ($id)
   $stmt->execute([':id' => $id]);
 
   return $stmt->rowCount() === 1;
+}
+
+// Save Invoice PDF
+function saveDocument ($id) 
+{
+  $doc = $_FILES['doc'];
+
+  if ($doc['error'] === UPLOAD_ERR_OK) {
+    $extension = pathinfo($doc['name'], PATHINFO_EXTENSION);
+
+    if (!file_exists('documents/')) {
+      mkdir('documents/');
+    }
+
+    $invoice = getInvoice($id);
+    $number = $invoice['number'];
+
+    $destination = 'documents/' . $number . '.' . $extension;
+
+    if (file_exists($destination)) {
+      unlink($destination);
+    }
+
+    return move_uploaded_file($doc['tmp_name'], $destination);
+  }
+  return false;
 }

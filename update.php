@@ -56,7 +56,7 @@
             </div>
         <?php endif; ?>
                 
-        <form method="post" class="bg-light border border-1 p-4">
+        <form method="post" class="bg-light border border-1 p-4" enctype="multipart/form-data">
 
           <input type="hidden" name="id" value="<?php echo $invoice['id'] ?>"/>
           <input type="hidden" name="number" value="<?php echo $invoice['number'] ?>"/>

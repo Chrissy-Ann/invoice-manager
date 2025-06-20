@@ -1,12 +1,3 @@
-<?php
-/*
-I used copilot to understand 'echo $movie['title'] ?? '';' in the movie mayhem example and used it.
-If the value is null (like in add.php), the value is an empty string.
-If the value is not null (like in update.php), that is the value so the form can be prepopulated.
-This means I can use the same input temple for both forms, even though one must be prepopulated.
-*/
-?>
-
 <div class="form-group mb-3">
   <label class="form-label" for="client">Client Name</label>
   <input type="text" class="form-control" id="client" name="client" required
@@ -36,4 +27,9 @@ This means I can use the same input temple for both forms, even though one must 
       </option>
     <?php endforeach; ?>
   </select>
+</div>
+
+<div class="form-group mb-3">
+  <label class="form-label" for="doc">Upload Invoice PDF</label>
+  <input type="file" class="form-control" id="doc" name="doc" accept=".pdf">
 </div>

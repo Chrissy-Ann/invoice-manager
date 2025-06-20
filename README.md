@@ -4,14 +4,14 @@
 - Section Number: 300/301
 
 
-1. Beyond incorporating the invoice_manager.sqlite database, what other refactoring did you do for this part of the project?
+1. What additional code would be required for the Invoice Manager application to accept multiple different file types?
 
-- Other than adding in the database, I created more functions in functions.php for the CRUD operations, instead of putting all the code on the main web pages. I edited the $statuses array in data.php to retrieve the statuses from the database. I also made a template of the inputs, like in the movie-mayhe demo, for the forms in update.php and add.php, because I was repeating the code.
+- To accept multiple file types, the input tag for the file would have to be changed. In the input tag, the accept attribute would be adjusted, adding more file extension types in a comma-separated list, like ".pdf, .jpg". If what was wanted was any file type of a certain media, there is also "images/*", "audio/*" and "video/*". This allows for any file type of that kind of media, such as all image files.
 
-2. In your own words, why is it important to use prepared statements and when should you use them?
+2. How would you improve the Invoice Manager application? What new features would you add or improve?
 
-- It is important to use prepared statements to avoid SQL injection. This is when a user submits malicious input, such as SQL instructing the database to delete data. Prepared statements should be used whenever data is received from a user to be sent to the database, such as a form with user inputs to add, update or delete something from the database.
+- I would improve the application by adding a search function, allowing to search by client name, and a sort feature to sort client names alphabetically. These features would make finding a particular invoice easier. 
 
-3. How did using a database to manage the data differ from using a session array? Which do you prefer and why?
+3. What have you learned from completing the Invoice Manager application? How will those skills help you in the future?
 
-- Using a database means that the data stays persistent even between sessions, when the browser is closed. I prefer databases when a lot of data is being handled, because it is more robust than using sessions.
+- I've learned how to connect a php application to a database, ways to handle data arrays, and ways to set up CRUD operations with php. These skills can be applied to many if not most projects I might work on in the future. They are basic skills with many applications.

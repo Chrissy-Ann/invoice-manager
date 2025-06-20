@@ -44,7 +44,7 @@
             </div>
         <?php endif; ?>
                 
-        <form method="post" class="bg-light border border-1 p-4">
+        <form method="post" class="bg-light border border-1 p-4" enctype="multipart/form-data">
 
           <?php require "inputs.php"; ?>
 

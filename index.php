@@ -81,6 +81,12 @@
                 <button type="submit" class="text-danger btn btn-link">Delete</button>
               </form>
             </td>
+            <!-- If the invoice has an associated pdf, have a view 'button' that opens pdf in new tab -->
+            <td>
+              <?php if (file_exists("documents/" . $invoice['number'] . ".pdf")): ?>
+                <a href="documents/<?php echo $invoice['number']; ?>.pdf" target="_blank">View</a>
+              <?php endif; ?>
+            </td>
           </tr>
         <?php endforeach; ?>
       </tbody>
