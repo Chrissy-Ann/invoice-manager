@@ -1,8 +1,5 @@
 # Invoice Manager
-- Name: Christina Hollands
-- Student Number: 041131217
-- Section Number: 300/301
-
+- Create a PHP application that displays invoice data
 
 1. What additional code would be required for the Invoice Manager application to accept multiple different file types?
 
