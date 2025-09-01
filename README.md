@@ -1,8 +1,5 @@
 # Invoice Manager
-- Name: Christina Hollands
-- Student Number: 041131217
-- Section Number: 300/301
-
+- Task: Refactor the Invoice Manager to be a database-driven web application.
 
 1. Beyond incorporating the invoice_manager.sqlite database, what other refactoring did you do for this part of the project?
 
