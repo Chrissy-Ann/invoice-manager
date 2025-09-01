@@ -1,8 +1,5 @@
 # Invoice Manager
-- Name: Christina Hollands
-- Student Number: 041131217
-- Section Number: 300/301
-
+- Task: Use predefined PHP variables to simplify the PHP template and add the ability to add new invoices with persistent data.
 
 1. What changes did you make when refactoring the project?
 
