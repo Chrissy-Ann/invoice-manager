@@ -1,8 +1,5 @@
 # Invoice Manager
-- Name: Christina Hollands
-- Student Number: 041131217
-- Section Number: 300/301
-
+- Task: Add the ability to update and delete invoices as well as validate the form data using different validation techniques.
 
 1. What validation techniques did you use for this project?
 
