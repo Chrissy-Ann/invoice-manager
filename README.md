@@ -1,7 +1,5 @@
 # Invoice Manager
-- Name: Christina Hollands
-- Student Number: 041131217
-- Section Number: 300/301
+- Task: Use PHP templates and provided invoice data to create a multipage site that displays invoice data in a list.
 
 
 1. What challenges did you face in completing this assignment?
